@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 /**
  * Safe environment configuration for Empathium XR.
  *
