@@ -5,12 +5,23 @@ import type { Request, Response } from "express";
  *
  * Phase 1 boundary rule:
  * - Accept user input.
- * - Do not retrieve memory.
+ * - Simulate retrieval without database or external calls.
  * - Do not persist data.
  * - Do not call an AI provider.
  */
 export function postGuardian(req: Request, res: Response): void {
   const userInput = typeof req.body?.message === "string" ? req.body.message : "";
+
+  const context = userInput.length > 0
+    ? {
+        retrieved: true,
+        memorySource: "mock",
+        memoryPreview: `Simulated relevant context for: ${userInput}`
+      }
+    : {
+        retrieved: false,
+        memorySource: null
+      };
 
   res.json({
     guardian: {
@@ -21,10 +32,7 @@ export function postGuardian(req: Request, res: Response): void {
         userInput.length > 0
           ? "I received your message. This Phase 1 mock response is stateless."
           : "Send a message field to test the Phase 1 mock Guardian flow.",
-      context: {
-        retrieved: false,
-        memorySource: null
-      },
+      context,
       persistence: {
         persisted: false,
         reason: "No persistence occurs in Phase 1 mock mode."
