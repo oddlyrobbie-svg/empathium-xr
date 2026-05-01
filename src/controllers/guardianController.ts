@@ -1,27 +1,18 @@
 import type { Request, Response } from "express";
+import { retrieveMemory } from "../services/memoryService";
 
 /**
  * Minimal Guardian mock controller.
  *
  * Phase 1 boundary rule:
  * - Accept user input.
- * - Simulate retrieval without database or external calls.
+ * - Retrieve request-scoped context through memoryService.
  * - Do not persist data.
  * - Do not call an AI provider.
  */
-export function postGuardian(req: Request, res: Response): void {
+export async function postGuardian(req: Request, res: Response): Promise<void> {
   const userInput = typeof req.body?.message === "string" ? req.body.message : "";
-
-  const context = userInput.length > 0
-    ? {
-        retrieved: true,
-        memorySource: "mock",
-        memoryPreview: `Simulated relevant context for: ${userInput}`
-      }
-    : {
-        retrieved: false,
-        memorySource: null
-      };
+  const context = await retrieveMemory(userInput);
 
   res.json({
     guardian: {
