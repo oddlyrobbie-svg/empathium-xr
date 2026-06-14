@@ -1,4 +1,4 @@
-# Empathium XR
+# Empathium Guardian 
 
 **Human-Aligned Guardian AI Protocol for XR**
 
